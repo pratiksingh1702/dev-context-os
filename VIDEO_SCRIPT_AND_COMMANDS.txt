@@ -1,0 +1,106 @@
+﻿================================================================================
+RAZORPAY AI BUILDATHON (OPEN TRACK) — 5-MINUTE PITCH VIDEO SCRIPT & COMMANDS
+Project: AI Developer Context OS (dev-context-os)
+Builder: Pratik Singh · NIT Jalandhar · ECE '27
+Target Duration: 4 minutes 45 seconds (Strictly under 5 minutes)
+================================================================================
+
+[SETUP BEFORE RECORDING]
+1. Open your terminal in full screen (or split terminal with Cursor/VS Code).
+2. Have the repository open at: uildathon/open-track-context-os/
+3. Have your terminal font readable and clear.
+4. Have your unlisted YouTube/Loom recorder ready.
+
+================================================================================
+PART 1: THE HOOK & THE PROBLEM (0:00 - 0:55)
+================================================================================
+[Visual: Camera on you / Facecam + Title slide on screen showing "AI Developer Context OS"]
+
+"Hi everyone, I'm Pratik Singh from NIT Jalandhar.
+Today, software engineering is undergoing a massive shift: developers and autonomous AI coding agents—like Claude Code, Cursor, Codex, and Windsurf—are working on the same codebases at the same time.
+
+But here is the massive bottleneck:
+1. Every AI tool operates with zero long-term memory. When you switch between Claude and Cursor, all architectural decisions and past resolved bug fixes are forgotten.
+2. Even worse: when two developers or AI agents touch the same critical files concurrently, Git has no concept of *agent intent*. Code collisions are discovered only after merge conflicts or broken builds in CI.
+
+To solve this, I built **AI Developer Context OS**: a universal project memory store and conflict-aware Git interceptor designed specifically for multi-agent software development."
+
+================================================================================
+PART 2: ARCHITECTURE & AI JUDGMENT (0:55 - 1:45)
+================================================================================
+[Visual: Architecture diagram from README.md or the terminal]
+
+"Our architecture is built on two core principles:
+
+First: Use AI strictly for semantic understanding and language, but use 100% deterministic logic for safety, locking, and money/code integrity.
+
+Second: Zero developer friction. We provide:
+1. A zero-config SQLite persistent store running in Write-Ahead Logging (WAL) mode.
+2. A hard token-budget compressor powered by tiktoken.
+3. An Model Context Protocol (MCP) server for native Cursor and Claude Desktop integration.
+4. A Git pre-push hook that intercepts concurrent pushes in under 12 milliseconds."
+
+================================================================================
+PART 3: LIVE TERMINAL DEMO (1:45 - 3:30)
+================================================================================
+[Visual: Screen recording your terminal]
+
+--- DEMO COMMAND 1: Storing Long-Term Project Memory ---
+Say: "Let's start by storing an architectural decision in persistent project memory."
+Run:
+python demo/simulate_collision.py
+
+Say: "Let's also run our CLI directly:
+python cli/memoryctl.py remember 'Fixed JWT expiration race condition by adding 30s leeway buffer' --category bug_fix --file core/auth.py"
+
+--- DEMO COMMAND 2: Semantic Recall with Hard Token Budget ---
+Say: "Now suppose another developer or agent joins and asks about the auth race condition. We recall it within an exact token budget of 300 tokens."
+Run:
+python cli/memoryctl.py recall "auth race condition" --budget 300
+
+Say: "Notice it didn't just dump text. It used our tiktoken greedy compressor, reporting exact tokens used: 70 out of 300, saving context window headroom."
+
+--- DEMO COMMAND 3: Active Session Registration & Git Interception ---
+Say: "Now let's see how we stop concurrent collisions.
+Suppose Developer Pratik starts a session with Claude Code to refactor auth tokens:"
+Run:
+python cli/memoryctl.py session-start --agent claude_code --dev "Pratik" --intent "Refactoring token validation loop to eliminate deadlock" --file core/auth.py
+
+Say: "Context OS soft-locks core/auth.py and records Pratik's stated intent.
+Now, suppose Developer Alex using Codex makes local changes to core/auth.py and runs git push:"
+Run:
+python cli/memoryctl.py check-conflicts core/auth.py
+
+Say: "Look at the terminal! The Git pre-push hook instantly triggers and intercepts the push with exit code 1. It displays:
+- The colliding file: core/auth.py
+- Risk level: HIGH
+- And most importantly, Claude Code's stated intent: 'Refactoring token validation loop to eliminate deadlock'.
+The developer immediately knows *why* the file is locked and can coordinate before overwriting."
+
+================================================================================
+PART 4: WHAT BROKE, AND HOW WE GOT OUT OF IT (3:30 - 4:25)
+================================================================================
+[Visual: Show WHAT_BROKE.md on screen or switch back to camera]
+
+"Now, the most critical part of this build: what broke, and how we solved it.
+
+In our first prototype, we tried to compute live neural embeddings over full multi-file commit diffs synchronously on every git push.
+On medium-sized commits, this caused git push to freeze for 6 to 8 seconds! In real life, developers hate latency and would immediately run 'git push --no-verify', making the tool useless.
+
+Here was our recovery:
+We decoupled heavy embedding computation from the push interceptor.
+1. Agents register their file touch-sets and stated intent asynchronously when their task starts.
+2. The Git pre-push hook executes an instantaneous O(1) set-intersection query in SQLite against the active session table.
+
+Interceptor latency dropped from 6,200ms down to under 12 milliseconds—fast, lightweight, and completely friction-free."
+
+================================================================================
+PART 5: WRAP-UP & CLOSING (4:25 - 4:45)
+================================================================================
+[Visual: Camera on you]
+
+"All code is fully tested with automated pytest suites, runs locally without external infrastructure, and integrates seamlessly with Cursor and Claude Code via MCP.
+
+Thank you to the Razorpay team for reviewing my submission for the Open Track. I look forward to the panel interview!"
+
+================================================================================

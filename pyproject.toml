@@ -1,0 +1,34 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "dev-context-os"
+version = "0.1.0"
+description = "Razorpay AI Buildathon (Open Track) - Persistent Developer Project Memory & Conflict-Aware Git Interceptor"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "typer>=0.12.0",
+    "rich>=13.7.0",
+    "pydantic>=2.8.0",
+    "aiosqlite>=0.20.0",
+    "sentence-transformers>=3.0.0",
+    "tiktoken>=0.7.0",
+    "litellm>=1.40.0",
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.30.0"
+]
+
+[project.scripts]
+memoryctl = "cli.memoryctl:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["cli", "memory", "hooks", "mcp", "demo"]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.2.0",
+    "pytest-asyncio>=0.23.0",
+    "httpx>=0.27.0"
+]
